@@ -8,22 +8,19 @@
 		die();
 	}
 
-	if(isset($_POST['deleteID'])){
-		$id=$_POST['deleteID'];
-	}
-
-	else{
-		header('Location: index.php'); //Se vuelve a la pagina principal
-	}
-
 	if (isset($_POST['delete'])){
 		if(strnatcasecmp( $_POST['submitted'],"Cancelar")==0){
 			header('Location: index.php'); //Se vuelve a la pagina principal
 		}
 
 		else{
-			$q->deleteActor($id); //Se borra el actor de la base de datos
-			header('Location: index.php'); //Se vuelve a la pagina principal
+
+			$actores=$q->getActores();
+			
+			foreach ($actores as $actor){
+				$q->deleteActor($actor[id]); //Se borra el actor de la base de datos
+				header('Location: index.php'); //Se vuelve a la pagina principal
+		 	}
 		}
 	}
 ?>

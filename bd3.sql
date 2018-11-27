@@ -15,12 +15,13 @@ create table actor(
 );
 
 create table user(
-  usuario varchar(50) primary key,
+  nick varchar(50) primary key,
   password varchar(50) not null,
   nombre varchar(50) not null,
-  apellidos varchar(50),
+  apellidos varchar(50) not null,
   email varchar(50) not null,
-  telefono int(9)
+  telefono int(9),
+  admin tinyint(1) not null
 );
 
 insert into actor (id, n_tbb, nombre, edad, nacionalidad, sexo, Otras_series, imagen, stcivil, coche, bici, moto, picaporte) 
@@ -43,3 +44,6 @@ values (6, 'Dra. Bernadette Rostenkowski', 'Melissa Rauch', 38, 'Estadounidense'
 
 insert into actor (id, n_tbb, nombre, edad, nacionalidad, sexo, Otras_series, imagen, stcivil, coche, bici, moto, picaporte) 
 values (7, 'Jim Parsons', 'Dr. Sheldon Cooper', 45, 'Estadounidense', 'Varon', 'SuperMansion - Eureka - iCarly', 'Jim_Parsons.jpg', 'Casado/a', 0, 0, 1, 0);
+
+INSERT INTO user(nick,password,nombre,apellidos,email,telefono,admin)
+ VALUES ('admin','admin','admin','admin','admin@admin',123123123,1);

@@ -15,15 +15,25 @@
 
 			$q=new Queries();
 
+			$admin=$_GET['admin'];
+
 			if(empty($q->dbc)){ //No se ha establecido la conexion con MySQL
 				echo "Error: no se ha podido establecer la conexion con MySQL";
 				die();
 			}
 
+
+
+/*if($logged){ //de lo del maestro
+    echo "Hola $nombre, está logeado como $nick";
+}
+if($admin){
+    echo " y es administrador";
+}*/
+
+
 echo <<<_END
 				<h1 align="center">Listado de actores</h1>
-
-					<center><a href="add.php"><img src="OK-512.png" width="5%" height="5%"></a></center> <!-- Boton de añadir -->
 
 				<!-- Tabla de actores -->
 				<table align="center">
@@ -60,5 +70,7 @@ _END;
 
 		?>
 				</table>
+
+				<center><a href="add.php"><img src="OK-512.png" width="5%" height="5%"></a> <a href="deleteAll.php"><img src="borrar.png" width="5%" height="5%"></a> </center>
 	</body>
 </html>

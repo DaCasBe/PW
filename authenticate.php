@@ -2,8 +2,8 @@
     require_once('libreria.php');
 
     //Funcion para loguearse en el sistema
-    function login($username,$password){
-        if(strlen($username)<=0){
+    function login($nick,$password){
+        if(strlen($nick)<=0){
             return false;
         }
 
@@ -18,25 +18,25 @@
             die();
         }
 
-        $checkUser=$q->checkUserAndPassword($username,$password); //Se comprueba si el usuario y la contraseña son correctos
+        $checkUser=$q->checkUserAndPassword($nick,$password); //Se comprueba si el usuario y la contraseña son correctos
 
-        if(!$checkUser){ //El usuario o la contraseña no son correctos
-            return false;
-        }
-
-        else{ //El usuario y la contraseña son correctos
+        if($checkUser){ //El usuario o la contraseña no son correctos
             session_start();
 
-            $userSessionInfo=$q->getUserSessionInfo($username); //Se carga la informacion de la sesion del usuario
+            $userSessionInfo=$q->getUserSessionInfo($nick); //Se carga la informacion de la sesion del usuario
 
-            $_SESSION['username']=$userSessionInfo['username'];
-            $_SESSION['name']=$userSessionInfo['name'];
+            $_SESSION['nick']=$userSessionInfo['nick'];
+            $_SESSION['nombre']=$userSessionInfo['nombre'];
             $_SESSION['admin']=$userSessionInfo['admin'];
             $_SESSION['check']=hash('ripemd128',$_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
 
-            header('Location: index.php'); //Se vuelve a la pagina principal
+            $sAdmin=$q->esAdmin($nick);
 
+            header('Location: indexlogin.php?admin=$sAdmin'); //Se vuelve a la pagina principal
+            //?admin=$_SESSION[\'admin\']
             return true;
+        }else{ //El usuario y la contraseña son correctos
+            return false;
         }
     }
 ?>
@@ -57,20 +57,16 @@
         if(isset($_POST['login'])){ //Se ha recibido el valor de login
             if(strnatcasecmp($_POST['submitted'],"Cancelar")==0){
                 header('Location: index.php'); //Se vuelve a la pagina principal
-            }
-
-            else{
+            }else{
                 $check=true;
-                $username=$_POST['username']; //Se recibe el nombre de usuario
+                $nick=$_POST['nick']; //Se recibe el nombre de usuario
                 $password=$_POST['password']; //Se recibe la contraseña
 
-                $checkLogin=login($username,$password); //Se loguea al usuario
+                $checkLogin=login($nick,$password); //Se loguea al usuario
 
                 if($checkLogin){ //Se ha logueado al usuario
-                    header('Location: index.php'); //Se vuelve a la pagina principal
-                }
-
-                else{ //No se ha logueado al usuario
+                    header('Location: indexlogin.php'); //Se vuelve a la pagina principal
+                }else{ //No se ha logueado al usuario
                     header('Location: authenticate.php?auth=false'); //Se va a una pagina de error
                 }
             }
@@ -85,60 +81,46 @@
         if(isset($_POST['addUser'])){
             if(strnatcasecmp($_POST['submitted'],"Cancelar")==0){
                 header('Location: index.php'); //Se vuelve a la pagina principal
-            }
-
-            else{
+            }else{
                 $check=true;
-                $user['username']=$_POST['username']; //Se recibe el nombre de usuario
+                $user['nick']=$_POST['nick']; //Se recibe el nombre de usuario
                 $user['password']=$_POST['password']; //Se recibe la contraseña
                 $user['confirmPassword']=$_POST['confirmPassword']; //Se recibe la confirmacion de la contraseña
-
-                if($user['password']!=$user['confirmPassword']){ //La contraseña no es igual a la confirmacion de la contraseña
-                    $check=false;
-                }
-
-                $user['name']=$_POST['name']; //Se recibe el nombre
-                $user['surname']=$_POST['surname']; //Se recibe el apellido
+                $user['nombre']=$_POST['nombre']; //Se recibe el nombre
+                $user['apellidos']=$_POST['apellidos']; //Se recibe el apellido
                 $user['email']=$_POST['email']; //Se recibe el email
-                $user['phone']=$_POST['phone']; //Se recibe el numero de telefono
+                $user['telefono']=$_POST['telefono']; //Se recibe el numero de telefono
 
-                if(($_POST['admin']=="Si") || ($_POST['admin']=="Sí")){ //El usuario dice ser administrador
-                    $user['admin']=true; //Se establece al usuario como administrador
+               /* if(($_POST['admin']==1){ //El usuario dice ser administrador
+                    $user['admin']=1; //Se establece al usuario como administrador
                 }
 
-                else if($_POST['admin']=="No"){ //El usuario dice no ser administrador
+                else if($_POST['admin']==0){ //El usuario dice no ser administrador
                     $user['admin']=0; //Se establece al usuario como no administrador
                 }
 
                 else{ //El usuario no ha especificado si es o no administrador
                     $check=false;
-                }
+                }*/
+                        $check=$q->checkNewUser($user);
 
-                $check=$q->checkNewUser($user);
+                        if($check){
+                            $status=$q->addUser($user); //Se añade el usuario a la base de datos
 
-                if($check){
-                    $status=$q->addUser($user); //Se añade el usuario a la base de datos
+                            if($status){ //Se ha añadido al usuario a la base de datos
+                                $checkLogin=login($user['nick'],$user['password']); //Se loguea al usuario
 
-                    if($status){ //Se ha añadido al usuario a la base de datos
-                        $checkLogin=login($user['username'],$user['password']); //Se loguea al usuario
-
-                        if($checkLogin){ //Se ha logueado al usuario
-                            header('Location: index.php'); //Se vuelve a la pagina principal
-                        }
-
-                        else{ //No se ha logueado al usuario
-                            header('Location: authenticate.php?auth=false'); //Se va a una pagina de error
-                        }
-                    }
-
-                    else{ //No se ha añadido al usuario a la base de datos
-                        echo "<h3 align='center' style='color: red'> Ha ocurrido un error. Intentelo de nuevo. </h3><br>";
-                    }
-                }
-
-                else{
+                                if($checkLogin){ //Se ha logueado al usuario
+                                    header('Location: indexlogin.php'); //Se vuelve a la pagina principal
+                                }else{ //No se ha logueado al usuario
+                                    header('Location: authenticate.php?auth=false'); //Se va a una pagina de error
+                                }
+                            }else{ //No se ha añadido al usuario a la base de datos
+                                echo "<h3 align='center' style='color: red'> Ha ocurrido un error. Intentelo de nuevo. </h3><br>";
+                            }
+                        }else{
                     echo "<h3 align='center' style='color: red'> Please check the fields and try again. </h3><br>";
-                }
+                        }
             }
         }
 
@@ -159,7 +141,7 @@ _END;
                     </tr>  
                     <tr align="left" >
                         <td >Usuario</td>
-                        <td ><input type="text" name="username" value=""></td>
+                        <td ><input type="text" name="nick" value=""></td>
                     </tr>  
                     <tr align="left" >
                         <td >Contraseña</td>
@@ -187,7 +169,7 @@ _END;
                     </tr>  
                     <tr align="left" >
                         <td >Usuario *</td>
-                        <td ><input type="text" name="username"></td>
+                        <td ><input type="text" name="nick"></td>
                     </tr>  
                     <tr align="left" >
                         <td >Contraseña *</td>
@@ -199,11 +181,11 @@ _END;
                     </tr>  
                     <tr align="left" >
                         <td >Nombre *</td>
-                        <td ><input type="text" name="name"></td>
+                        <td ><input type="text" name="nombre"></td>
                     </tr>  
                     <tr align="left" >
                         <td >Apellidos</td>
-                        <td ><input type="text" name="surname"></td>
+                        <td ><input type="text" name="apellidos"></td>
                     </tr>  
                     <tr align="left" >
                         <td >e-mail *</td>
@@ -211,7 +193,7 @@ _END;
                     </tr> 
                     <tr align="left" >
                         <td >Teléfono</td>
-                        <td ><input type="text" name="phone"></td>
+                        <td ><input type="text" name="telefono"></td>
                     </tr> 
                     <tr align="center" >
                         <td colspan="2">

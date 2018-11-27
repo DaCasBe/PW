@@ -1,10 +1,10 @@
 <?php
     session_start();
 
-    if(isset($_SESSION['username'])){
+    if(isset($_SESSION['nick'])){
         $logged=true;
-        $username=$_SESSION['username'];
-        $name=$_SESSION['name'];
+        $nick=$_SESSION['nick'];
+        $nombre=$_SESSION['nombre'];
         $admin=$_SESSION['admin'];
     }
 
