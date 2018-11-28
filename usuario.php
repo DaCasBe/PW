@@ -5,7 +5,7 @@
 
 	<body bgcolor="A4A4A4">
 		<?php
-			$id=$_GET['id']; //Se recibe el ID del actor a mostrar
+			$nick=$_GET['nick']; //Se recibe el ID del actor a mostrar
 
 			require_once('libreria.php');
 
@@ -16,46 +16,46 @@
 				die();
 			}
 			
-			$actor=$q->getActor($id); //Se carga la informacion del actor especificado
+			$usuario=$q->getUserSessionInfo($nick); //Se carga la informacion del actor especificado
 
 			echo <<<_END
-				<!-- Se muestra la informacion del actor especificado -->
-			 	<center> <img src= $actor[imagen] ></center>
+				<!-- Se muestra la informacion del usuario especificado -->
+			 	<center> <img src= $usuario[imagen] ></center>
 			 	<table align="center" border="4" bordercolor="#F9F9F6" bgcolor="#467DEC" width="570">
 					<tr>
 						<th colspan="2">Datos Personales</th>
 					</tr>
 					<tr>													
-						<td>Nombre del personaje:</td>
-						<td>$actor[n_tbb] </td>
-					</tr>
-					<tr>													
-						<td>Nombre completo:</td>
-						<td>$actor[nombre] </td>
+						<td>Nick del usuario:</td>
+						<td>$usuario[nick] </td>
 					</tr>
 					<tr>
-						<td>Edad:</td>  
-						<td>$actor[edad] </td>
+						<td>Nombre:</td>
+						<td>$usuario[nombre] </td>
+					</tr>
+					<tr>
+						<td>Apellidos:</td>
+						<td>$usuario[apellidos] </td>
 					</tr>
 					<tr>
 						<td>Sexo:</td>
-						<td>$actor[sexo]</td>
+						<td>$usuario[sexo]</td>
 					</tr>
 					<tr>
-						<td>Nacionalidad:</td>  
-						<td>$actor[nacionalidad] </td>				
+						<td>E-mail:</td>  
+						<td>$usuario[email] </td>
 					</tr>
 					<tr>
-						<td>Estado civil:</td>  
-						<td>$actor[stcivil] </td>				
+						<td>Telefono:</td>  
+						<td>$usuario[telefono] </td>				
 					</tr>
 					<tr>
-						<td>Otras series:</td>  
-						<td>$actor[Otras_series] </td>
+						<td>Hobbies:(Beber/Chupar tizas/Otras)</td>
+						<td>$usuario[beber] $usuario[tiza] $usuario[otras]</td>
 					</tr>
 					<tr>
-						<td>Vehiculos:(Coche/Bici/Moto/Picaporte)</td>
-						<td>$actor[coche] $actor[bici] $actor[moto] $actor[picaporte]</td>
+						<td>Administrador:</td>  
+						<td>$usuario[admin] </td>				
 					</tr>
 				</table> 
 

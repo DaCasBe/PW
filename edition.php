@@ -224,6 +224,6 @@ _END;
 
 				<br>
 
-				<center><button onclick="location.href='index.php'">Cancelar</button></center>
+				<center><button onclick="location.href='indexlogin.php'">Cancelar</button></center>
 	</body>
 </html>		

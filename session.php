@@ -4,7 +4,7 @@
     if(isset($_SESSION['nick'])){
         $logged=true;
         $nick=$_SESSION['nick'];
-        $nombre=$_SESSION['nombre'];
+        $email=$_SESSION['email'];
         $admin=$_SESSION['admin'];
     }
 

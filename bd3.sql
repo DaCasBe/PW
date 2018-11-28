@@ -7,7 +7,7 @@ create table actor(
   sexo varchar(10) not null,
   Otras_series varchar(256) not null,
   imagen varchar(50) not null,
-  stcivil varchar (10) not null,
+  stcivil varchar(10) not null,
   coche tinyint(1) not null,
   bici tinyint(1) not null,
   moto tinyint(1) not null,
@@ -18,9 +18,14 @@ create table user(
   nick varchar(50) primary key,
   password varchar(50) not null,
   nombre varchar(50) not null,
-  apellidos varchar(50) not null,
+  apellidos varchar(50),
+  sexo varchar(50) not null,
   email varchar(50) not null,
   telefono int(9),
+  beber tinyint(1),
+  tiza tinyint(1),
+  otras tinyint(1),
+  imagen varchar(50) not null,
   admin tinyint(1) not null
 );
 
@@ -45,5 +50,8 @@ values (6, 'Dra. Bernadette Rostenkowski', 'Melissa Rauch', 38, 'Estadounidense'
 insert into actor (id, n_tbb, nombre, edad, nacionalidad, sexo, Otras_series, imagen, stcivil, coche, bici, moto, picaporte) 
 values (7, 'Jim Parsons', 'Dr. Sheldon Cooper', 45, 'Estadounidense', 'Varon', 'SuperMansion - Eureka - iCarly', 'Jim_Parsons.jpg', 'Casado/a', 0, 0, 1, 0);
 
-INSERT INTO user(nick,password,nombre,apellidos,email,telefono,admin)
- VALUES ('admin','admin','admin','admin','admin@admin',123123123,1);
+insert into user (nick,password,nombre,apellidos,sexo,email,telefono,beber,tiza,otras,imagen,admin)
+values ('Kasol','admin','Daniel','Castillo Bello','Hombre','realmentenohaymas@gmail.com',888888888,0,1,0,'picaporte.jpg',1);
+
+insert into user (nick,password,nombre,apellidos,sexo,email,telefono,beber,tiza,otras,imagen,admin)
+values ('NNCREEPY','admin','Diego','Canela','Hombre','realmentesihaymas@gmail.com',888888888,1,1,1,'',1);

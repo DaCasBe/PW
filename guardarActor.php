@@ -44,7 +44,7 @@
 
 		else{
 		  $q->addActor($actor); //Se añade el actor a la base de datos
-		  header('Location: index.php'); //Se vuelve a la pagina principal
+		  header('Location: indexlogin.php'); //Se vuelve a la pagina principal
 		}
 		
 	}
@@ -72,11 +72,11 @@
 
 		else{
 			$q->addActor($actor); //Se añade el actor a la base de datos
-			header('Location: index.php'); //Se vuelve a la pagina principal
+			header('Location: indexlogin.php'); //Se vuelve a la pagina principal
 		}
 	}
 
 	else{ //No se ha recibido ninguno de los valores anteriores
-		header('Location: index.php'); //Se vuelve a la pagina principal
+		header('Location: indexlogin.php'); //Se vuelve a la pagina principal
 	}
 ?>

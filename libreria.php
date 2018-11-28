@@ -1,8 +1,8 @@
 <?php
 
 	class Queries{
-		public $usuario='diegopw';  //Nombre de usuario
-		public $password='qawsed567'; //Contraseña
+		public $usuario='Daniel';  //Nombre de usuario
+		public $password='KASOLCoD97'; //Contraseña
 		public $dbc; //Objeto de conexion con la base de datos
 
 		//Funcion para conectarse con la base de datos
@@ -15,7 +15,7 @@
 			$dbc=null; //Se establece el objeto de conexion sin ninguna conexion
 
 			try{ //Se trata de establecer la conexion con la base de datos
-				$dbc=new PDO('mysql:host=localhost; dbname=bdppw',$this->usuario,$this->password,array(PDO::ATTR_PERSISTENT => true));
+				$dbc=new PDO('mysql:host=localhost; dbname=osac',$this->usuario,$this->password,array(PDO::ATTR_PERSISTENT => true));
 			}catch(PDOException $e){
 				return null;
 			}
@@ -77,7 +77,7 @@
 		}
 
 		public function checkUserAndPassword($nick,$password){
-			$sentence=$this->dbc->prepare("SELECT * FROM user WHERE nick=\"$nick\" AND password=\"$password\"");
+			$sentence=$this->dbc->prepare("SELECT * FROM user WHERE nick='$nick' AND password='$password'");
 
 			if($sentence->execute()){
 				return true;
@@ -87,7 +87,7 @@
 		}
 
 		public function getUserSessionInfo($username){
-			$sentence=$this->dbc->prepare("SELECT * FROM user WHERE nick=$usarname[nick]");
+			$sentence=$this->dbc->prepare("SELECT * FROM user WHERE nick='$username'");
 
 			if($sentence->execute()){
 				$user=$sentence->fetch();
@@ -96,27 +96,31 @@
 			return $user;
 		}
 
-		public function checkNewUser($oldUser){
-			$sentence=$this->dbc->prepare("SELECT * FROM user WHERE nick=$oldUser[nick]");
+		public function checkNewUser($user){
+			$sentence=$this->dbc->prepare("SELECT * FROM user WHERE nick=$user[nick]");
 
 			if($sentence->execute()){
 				return false;
 			}
 
-			if($oldUser['nick']==""){ 
-                        return false;
+			if($user['nick']==""){ 
+                return false;
             }
-            if($oldUser['password']==""){ 
-                        return false;
+
+            if($user['password']==""){ 
+                return false;
             }
-            if($oldUser['password']!=$oldUser['confirmPassword']){ 
-                    return false;
+
+            if($user['password']!=$user['confirmPassword']){ 
+                return false;
             }
-            if($oldUser['nombre']==""){ 
-                        return false;
+
+            if($user['nombre']==""){ 
+                return false;
             }
-            if($oldUser['email']==""){ 
-                        return false;
+
+            if($user['email']==""){ 
+                return false;
             }
 
 			return true;
@@ -133,14 +137,29 @@
 		}
 
 		public function esAdmin($nick){
-			$sentence=$this->dbc->prepare("SELECT admin FROM user WHERE nick=$nick");
+			$sentence=$this->dbc->prepare("SELECT admin FROM user WHERE nick=$nick AND admin=1");
 
-			if($sentence->execute()==1){
+			if($sentence->execute()){
 				return true;
 			}
 
 			return false;
 		}
 
+		public function getUsuarios(){
+			$usuarios=array();
+			$i=0;
+
+			$sentence=$this->dbc->prepare("SELECT * FROM user"); //Se establece la sentencia especificada
+
+			if($sentence->execute()){ //Se ejecuta la sentencia anterior
+				while($row=$sentence->fetch()){
+					$usuarios[$i]=$row; //Se carga el actor
+					$i++;
+				}
+			}
+			
+			return $usuarios;
+		}
 	}
 ?>
