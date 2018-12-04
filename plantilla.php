@@ -8,7 +8,22 @@
 			$id=$_GET['id']; //Se recibe el ID del actor a mostrar
 
 			require_once('libreria.php');
+			require_once('session.php');
 
+			$now=time();
+
+			if($now>$_SESSION['expire']){
+				session_destroy();
+
+echo <<< _END
+					<div align="center" class='alert alert-danger' role='alert'>
+						<h4> La sesión ha expirado </h4>
+						<p> <a href='authenticate.php'> Accede aqui</a></p>
+					</div>
+_END;
+			}
+
+			else{
 			$q=new Queries();
 
 			if(empty($q->dbc)){ //No se ha podido establecer conexion con la base de datos
@@ -61,6 +76,7 @@
 
 				<center><a href="indexlogin.php"><img src="menu.png" width="5%" height="5%"></a></center>
 _END;
+			}
 		?>
 	</body>
 </html>

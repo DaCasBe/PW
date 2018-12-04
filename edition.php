@@ -6,7 +6,22 @@
 			$id=$_GET['id']; //Se recibe el ID del actor a modificar
 
 			require_once('libreria.php');
+			require_once('session.php');
 
+			$now=time();
+
+			if($now>$_SESSION['expire']){
+				session_destroy();
+
+echo <<< _END
+					<div align="center" class='alert alert-danger' role='alert'>
+						<h4> La sesión ha expirado </h4>
+						<p> <a href='authenticate.php'> Accede aqui</a></p>
+					</div>
+_END;
+			}
+
+			else{
 			$q=new Queries();
 
 			if(empty($q->dbc)){ //No se ha establecido la conexion con la base de datos
@@ -197,7 +212,7 @@ _END;
 _END;
 							}
 
-			echo <<< _END
+echo <<< _END
 						</td>	
 				 	</tr>
 		 			 <tr>	
@@ -209,8 +224,6 @@ _END;
 						</td>
 					 </tr>	
 					</table>
-_END;
-		?>
 
 					<br>
 
@@ -225,5 +238,8 @@ _END;
 				<br>
 
 				<center><button onclick="location.href='indexlogin.php'">Cancelar</button></center>
+_END;
+			}
+		?>
 	</body>
 </html>		

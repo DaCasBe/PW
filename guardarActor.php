@@ -36,7 +36,8 @@
 		$actor['coche']=$_POST['coche'];
 		$actor['bici']=$_POST['bici'];
 		$actor['moto']=$_POST['moto'];
-		$actor['picaporte']=$_POST['picaporte']; 
+		$actor['picaporte']=$_POST['picaporte'];
+		$actor['nick_user']=$_POST['nick_user'];
 
 		if(isset($_POST['id'])){
 			$id=$_POST['deleteID'];
@@ -64,7 +65,8 @@
 		$actor['coche']=$_POST['coche'];
 		$actor['bici']=$_POST['bici'];
 		$actor['moto']=$_POST['moto'];
-		$actor['picaporte']=$_POST['picaporte']; 
+		$actor['picaporte']=$_POST['picaporte'];
+		$actor['nick_user']=$_POST['nick_user'];
 
 		if(isset($_POST['id'])){
 			$id=$_POST['deleteID'];

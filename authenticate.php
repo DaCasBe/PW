@@ -30,6 +30,8 @@
             $_SESSION['email']=$userSessionInfo['email'];
             $_SESSION['admin']=$userSessionInfo['admin'];
             $_SESSION['check']=hash('ripemd128',$_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
+            $_SESSION['start']=time();
+            $_SESSION['expire']=$_SESSION['start']+(1*60);
 
             return true;
         }
@@ -198,7 +200,7 @@ _END;
                         <td >Sexo *</td>
                         <td><input type="radio" name="sexo" value="Hombre">Hombre<br>
                         <input type="radio" name="sexo" value="Mujer">Mujer<br>
-                        <input type="radio" name="sexo" value="Indefinido">Indefinido<br></td>
+                        <input type="radio" name="sexo" value="Indefinido" checked>Indefinido<br></td>
                     </tr>
                     <tr align="left" >
                         <td >e-mail *</td>
@@ -210,9 +212,11 @@ _END;
                     </tr>
                     <tr align="left" >
                         <td >Hobbies</td>
-                        <td><input type="checkbox" name="beber" value="1">Beber <br>
-                        <input type="checkbox" name="tiza" value="1">Chupar tizas <br>
-                        <input type="checkbox" name="otras" value="1">Otras <br></td>
+                        <td>
+                            <input type="checkbox" name="beber" value="1">Beber <br>
+                            <input type="checkbox" name="tiza" value="1">Chupar tizas <br>
+                            <input type="checkbox" name="otras" value="1">Otras <br>
+                        </td>
                     </tr>
                     <tr align="left" >
                         <td >Imagen</td>

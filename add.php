@@ -4,15 +4,30 @@
 	<body bgcolor="#82FA58">
 		<?php
 			require_once('libreria.php');
+			require_once('session.php');
 
+			$now=time();
+
+			if($now>$_SESSION['expire']){
+				session_destroy();
+
+echo <<< _END
+					<div align="center" class='alert alert-danger' role='alert'>
+						<h4> La sesión ha expirado </h4>
+						<p> <a href='authenticate.php'> Accede aqui</a></p>
+					</div>
+_END;
+			}
+
+			else{
 			$q=new Queries();
 
 			if(empty($q->dbc)){ //No se ha establecido la conexion con la base de datos
 				echo "Error en la conexion a MYSQL...";
 				die();
 			}
-		?>
 
+echo <<< _END
 		<!-- Formulario para añadir un actor -->
 		<form method="post" action="guardarActor.php">
 	  		<table align="center">
@@ -94,9 +109,15 @@
 				<td>
 						<input type="file" name="imagen">
 				</td>
-			 </tr>	
-			
-			
+			 </tr>
+			 <tr>
+			 	<td>
+			 		Usuario al que corresponde
+			 	</td>
+			 	<td>
+			 		<input type="text" name="nick_user">
+			 	</td>
+			 </tr>
 			</table>
 			<br>
 			<center><input type="submit" name="add" value="Submit"/></center>
@@ -107,5 +128,8 @@
 		<br>
 		
 		<center><button onclick="location.href='indexlogin.php'">Cancelar</button></center>
+_END;
+		}
+		?>
 	</body>
 </html>

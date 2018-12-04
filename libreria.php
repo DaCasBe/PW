@@ -53,7 +53,7 @@
 
 		//Funcion para añadir un actor a la base de datos
 		public function addActor($actor){
-			$sentence=$this->dbc->prepare("INSERT INTO actor(id, nombre, n_tbb, edad,sexo, nacionalidad, stcivil, Otras_series, imagen, coche, bici, moto, picaporte) VALUES('$actor[id]', '$actor[nombre]', '$actor[n_tbb]', '$actor[edad]','$actor[sexo]', '$actor[nacionalidad]','$actor[stcivil]', '$actor[Otras_series]', '$actor[imagen]', '$actor[coche]', '$actor[bici]', '$actor[moto]','$actor[picaporte]')"); //Se establece la sentencia especificada
+			$sentence=$this->dbc->prepare("INSERT INTO actor(id, nombre, n_tbb, edad,sexo, nacionalidad, stcivil, Otras_series, imagen, coche, bici, moto, picaporte,nick_user) VALUES('$actor[id]', '$actor[nombre]', '$actor[n_tbb]', '$actor[edad]','$actor[sexo]', '$actor[nacionalidad]','$actor[stcivil]', '$actor[Otras_series]', '$actor[imagen]', '$actor[coche]', '$actor[bici]', '$actor[moto]','$actor[picaporte]','$actor[nick_user]')"); //Se establece la sentencia especificada
 			
 			$sentence->execute(); //Se ejecuta la sentencia anterior
 
@@ -61,9 +61,8 @@
 		}
 
 		//Funcion para borrar una actor de la base de datos
-		public function deleteActor($actor){
-			$sentence=$this->dbc->prepare("DELETE FROM actor WHERE id=$actor[id]"); //Se establece la sentencia especificada
-
+		public function deleteActor($id){
+			$sentence=$this->dbc->prepare("DELETE FROM actor WHERE id=$id"); //Se establece la sentencia especificada
 			$sentence->execute(); //Se ejecuta la sentencia anterior
 
 			return;
@@ -80,7 +79,11 @@
 			$sentence=$this->dbc->prepare("SELECT * FROM user WHERE nick='$nick' AND password='$password'");
 
 			if($sentence->execute()){
-				return true;
+				if($sentence->fetch()){
+					return true;
+				}
+
+				return false;
 			}
 
 			return false;
@@ -100,7 +103,9 @@
 			$sentence=$this->dbc->prepare("SELECT * FROM user WHERE nick=$user[nick]");
 
 			if($sentence->execute()){
-				return false;
+				if($sentence->fetch()){
+					return false;
+				}
 			}
 
 			if($user['nick']==""){ 
@@ -127,7 +132,7 @@
 		}
 
 		public function addUser($newUser){
-			$sentence=$this->dbc->prepare("INSERT INTO user(nick,password,nombre,apellidos,email,telefono) VALUES('$newUser[nick]','$newUser[password]','$newUser[nombre]','$newUser[apellidos]','$newUser[email]','$newUser[telefono]')");
+			$sentence=$this->dbc->prepare("INSERT INTO user(nick,password,nombre,apellidos,sexo,email,telefono,beber,tiza,otras,imagen,admin) VALUES('$newUser[nick]','$newUser[password]','$newUser[nombre]','$newUser[apellidos]','$newUser[sexo]','$newUser[email]','$newUser[telefono]','$newUser[beber]','$newUser[tiza]','$newUser[otras]','$newUser[imagen]','$newUser[admin]')");
 
 			if($sentence->execute()){
 				return true;
@@ -160,6 +165,34 @@
 			}
 			
 			return $usuarios;
+		}
+
+		//Funcion para pedir un aumento
+		public function pedirAumento($user,$sueldo){
+			$sentence=$this->dbc->prepare("UPDATE user SET mas_sueldo=$sueldo WHERE nick='$user'"); //Se establece la sentencia especificada
+
+			$sentence->execute(); //Se ejecuta la sentencia anterior
+		}
+
+		//Funcion para aumentar sueldo
+		public function aumentarSueldo($user,$sueldo){
+			$sentence=$this->dbc->prepare("UPDATE user SET sueldo=$sueldo WHERE nick='$user'"); //Se establece la sentencia especificada
+			$sentence->execute(); //Se ejecuta la sentencia anterior
+
+			$sentence=$this->dbc->prepare("UPDATE user SET mas_sueldo=0 WHERE nick='$user'"); //Se establece la sentencia especificada
+			$sentence->execute(); //Se ejecuta la sentencia anterior
+		}
+
+		public function esActor($nick){
+			$sentence=$this->dbc->prepare("SELECT nick_user FROM actor WHERE '$nick'=nick_user");
+
+			if($sentence->execute()){
+				if($sentence->fetch()){
+					return true;
+				}
+			}
+
+			return false;
 		}
 	}
 ?>
